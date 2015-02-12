@@ -1,4 +1,4 @@
-define(['lib/Vue'], function (Vue) {
+define(function () {
   return function(View, DataSource, appConfig){
     var slideData = new DataSource.SlideDataSource({
       appConfig: appConfig

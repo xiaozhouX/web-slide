@@ -1,4 +1,4 @@
-define(['app/simple/Basic', 'lib/Vue', 'utils/event', 'utils/util'], function (Basic, Vue, Event, _) {
+define(['app/simple/Basic', 'Vue', 'utils/event', 'utils/util'], function (Basic, Vue, Event, _) {
   return Basic.extend(Event, {
     init: function(options){
       options = options || {};
