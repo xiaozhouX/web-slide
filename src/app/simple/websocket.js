@@ -1,4 +1,4 @@
-define(['app/simple/Basic', 'utils/event'], function(Basic, Event) {
+define(['app/simple/basic', 'utils/event'], function(Basic, Event) {
   var DEFAULT_URL = 'ws://localhost:3000';
   return Basic.extend(Event, {
     connect: function (){

@@ -1,4 +1,4 @@
-define(['app/simple/Basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
+define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
   return Basic.extend({
     _load: function (url, method, data){
       var http_request; 

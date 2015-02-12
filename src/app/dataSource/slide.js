@@ -1,4 +1,4 @@
-define(['./DataSource'], function (DataSource) {
+define(['./dataSource'], function (DataSource) {
   return DataSource.extend({
   });
 });
