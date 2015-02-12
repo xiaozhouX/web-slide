@@ -10,7 +10,10 @@ define(['utils/util'], function(_) {
     if(eventsApi(eventName, subscribe, this, arguments)) {
       return this;
     }
-    callback = _.isString(callback) && this[callback];
+    callback = _.isString(callback) && this[callback] || callback;
+    if(!callback) {
+      throw Error('function of ' + eventName + ' is not exist!')
+    }
     var pos = _eventNames.indexOf(eventName),
         handlers = {fn: callback, suber: suber || this};
     if(pos !== -1) {
@@ -31,7 +34,9 @@ define(['utils/util'], function(_) {
     if(pos !== -1) {
       handlers = _callbackHandlers[pos];
       _.forEach(handlers, function(handler){
-        handler.fn.call(handler.suber, data);
+        if(handler.fn) {
+          handler.fn.call(handler.suber, data);
+        }
       });
     }
   };

@@ -4,6 +4,7 @@ define(['app/simple/Basic', 'lib/Vue', 'utils/event', 'utils/util'], function (B
       options = options || {};
       this.ds = options.dataSource;
       this.el = this.el || options.el || '';
+      this.data = this.data || options.data || '';
       this.tpl = this.tpl || options.tpl || '';
       this.behaviorHandlers = convertHandler(this.behaviorHandlers, this);
       this.render();
@@ -22,21 +23,44 @@ define(['app/simple/Basic', 'lib/Vue', 'utils/event', 'utils/util'], function (B
       if(!this.vm) {
         this.vm = new Vue({
           el: this.el ,
+          data: this.data,
           template: this.template,
           methods: this.behaviorHandlers
         });
       }
     },
 
-    updata: function(data){
-      thie.vm.$data = data;
+    $emit: function(evt, value){
+      console.log(arguments);
+      this.vm.$emit(evt, value);
+    },
+
+
+    $on: function(evt, fn){
+      this.vm.$on(evt, fn);
+    },
+
+
+    $once: function(){
+      this.vm.$once.apply(this.vm, arguments);
+    },
+
+
+    $off: function(){
+      this.vm.$off.apply(this.vm, arguments);
+    },
+
+    $update: function(data){
+      if(data){
+        this.vm.$data = this.data = data;
+      }
     }
   });
 
   function convertHandler(handler, context) {
     return _.reduce(handler, function(memo, fn, eventName){
         if(_.isString(fn)){
-          fn = self[fn];
+          fn = context[fn];
         }
         if(fn){
           memo[eventName] = function(){
