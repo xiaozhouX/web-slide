@@ -9,36 +9,15 @@ define(['app/simple/view', 'tpl!app/template/control.tpl', 'app/dataSource/slide
     template: tpl,
     el: '#left',
     behaviorHandlers: {
-      'onPlay': function(){
-        this.emit('playSlide');
-      },
-      'onAdd': function(){
-        var length = this.data.pages.length;
-        this.data.pages.push({
-         header: '标题' + length,
-         content: '内容...',
-         transition: 'normal',
-         images: []
-        });
-      },
-      'changeSlide': function(n) {
-        this.emit('changeSlide', n);
-      },
-      'onConnect': function() {
-        var self = this,
-            ws = this.ws;
-        ws.connect().then(function(){
-
-          return ws.verify(self.id);
-        }).then(function(){
-          self.data.status = 'link';
-          self.emit('playSlide');
-        })
-      },
-      'onSave': function(){
-        console.log(this.data);
-        this.ds.update(this.data);
-      }
+      'fullScreenPlay': 'onFullScreenPlay',
+      'changeSlide': 'onChangeSlide',
+      'remoteConnect': 'onRemoteConnect',
+      'saveSlide': 'onSaveSlide',
+      'onAdd': 'onAddPage',
+      'addPage' : 'onAddPage',
+      'delPage' : 'onDelPage',
+      'upPage' : 'onUpPage',
+      'downPage' : 'onDownPage'
     },
     eventHandlers: {
       "controlWS:nextPage": function(){
@@ -51,11 +30,66 @@ define(['app/simple/view', 'tpl!app/template/control.tpl', 'app/dataSource/slide
          this.emit('changeSlide', 0);
       }
     },
+    onFullScreenPlay: function(){
+      this.emit('playSlide');
+    },
     onChangeSlide: function(n) {
+      this.emit('changeSlide', n);
+    },
+    onSaveSlide: function (){
+      this.ds.update(this.data);
+    },
+    onAddPage: function(){
       var length = this.data.pages.length;
-      if(n < length && n >= 0) {
-        this.data.currentPage = n;
+      this.data.pages.push({
+       header: '标题' + (length + 1),
+       content: '内容...',
+       transition: 'normal',
+       images: []
+      });
+      this.data.currentPage = length;
+    },
+    onDelPage: function(){
+      var currentPage = this.data.currentPage;
+      this.data.pages.splice(currentPage, 1);
+      if(currentPage > this.data.pages.length - 1 && currentPage > 0) {
+        this.data.currentPage --;
       }
+      console.log(this.data.pages);
+    },
+    onUpPage: function(){
+      var currentPage = this.data.currentPage,
+          pageData = this.data.pages,
+          lastPage, curPage;
+      if(currentPage <= 0){
+        return;
+      }
+      lastPage = pageData[currentPage - 1];
+      curPage = pageData[currentPage];
+      pageData.splice(currentPage-1, 2, curPage, lastPage);
+      this.data.currentPage = currentPage - 1;
+    },
+    onDownPage: function(){
+      var currentPage = this.data.currentPage,
+          pageData = this.data.pages,
+          prevPage, curPage;
+      if(currentPage >= pageData.length - 1){
+        return;
+      }
+      prevPage = pageData[currentPage + 1];
+      curPage = pageData[currentPage];
+      pageData.splice(currentPage, 2, prevPage, curPage);
+      this.data.currentPage = currentPage + 1;
+    },
+    onRemoteConnect: function() {
+      var self = this,
+          ws = this.ws;
+      ws.connect().then(function(){
+        return ws.verify(self.id);
+      }).then(function(){
+        self.data.status = 'link';
+        self.emit('playSlide');
+      });
     },
     onKeyDown: function(e){
       key = e.keyCode;

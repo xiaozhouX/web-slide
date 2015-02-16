@@ -15,9 +15,11 @@
     margin-right: 20px;
   }
   .play-list{
-    height: 400px;
+    height: 250px;
+    overflow-y: scroll;
   }
   .play-list-title{
+    width: 100%;
     line-height: 26px;
     background: #E8E8E8;
     border-bottom: 1px solid #ccc;

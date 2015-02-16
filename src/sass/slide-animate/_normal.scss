@@ -1,3 +1,24 @@
 .transition-normal{
   @include slide-transition;
 }
+
+.transition-normal-big{
+  @include slide-transition;
+  transform-origin: 50% 50%;
+  &.expand-enter {
+    transform: scale(1.5);
+  }
+  &.expand-leave {
+    transform: scale(1.5);
+  }
+}
+
+.transition-normal-small{
+  @include slide-transition;
+  &.expand-enter {
+    transform: scale(0);
+  }
+  &.expand-leave {
+    transform: scale(0);
+  }
+}

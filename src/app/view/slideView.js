@@ -11,6 +11,7 @@ define(['app/simple/view', 'tpl!app/template/slide.tpl', 'utils/launchFullScreen
       'changeSlide': 'onChangeSlide'
     },
     behaviorHandlers: {
+      'clickSlide': 'onClickSlide',
       'moveElemStart': 'onMoveElemStart',
       'resizeElemStart': 'onResizeElemStart',
       'removeElem': 'onRemoveElem',
@@ -19,6 +20,10 @@ define(['app/simple/view', 'tpl!app/template/slide.tpl', 'utils/launchFullScreen
     onPlaySlide: function(){
       this.slideElem = this.slideElem || document.getElementById('play-wrap');
       launchFullScreen(this.slideElem);
+    },
+    onClickSlide: function(){
+      this.emit('cancelElemEdit');
+      this.editngElem.classList.remove('elem-editing');
     },
     onGetData: function(data){
       this.$update(data);
@@ -71,12 +76,15 @@ define(['app/simple/view', 'tpl!app/template/slide.tpl', 'utils/launchFullScreen
         throw Error('there is not data type: ' + type);
       }
       index = data.indexOf(vm.$data);
+      data[index].hidden = true;
       data[index] = null;
       if(index !== -1) {
         data.splice(index, 1);
+        this.emit('cancelElemEdit');
       }
     },
-    onEditElem: function(vm){
+    onEditElem: function(vm, evt){
+      evt.stopPropagation();
       this.onEditingElem(vm.$el, 'elem-editing');
       this.emit('elemEdit', vm.$data);
     },
