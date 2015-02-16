@@ -5,7 +5,16 @@ gulp.task('webserver', function() {
   // process.chdir('../src');
   gulp.src('../src')
     .pipe(webserver({
-      livereload: true,
+      livereload: {
+        enable: true, // need this set to true to enable livereload
+        filter: function(fileName) {
+          if (fileName.match(/.scss$/)) { // exclude all source maps from livereload
+            return false;
+          } else {
+            return true;
+          }
+        },
+      },
       // directoryListing: true,
       open: 'index.html'
     }));

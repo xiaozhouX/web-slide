@@ -1,51 +1,91 @@
-define(['app/simple/view', 'tpl!app/template/slide.tpl', 'utils/launchFullScreen', 'utils/domEvent'], function (View, tpl, launchFullScreen, domEvent) {
+define(['app/simple/view', 'tpl!app/template/slide.tpl', 'utils/launchFullScreen', 'utils/domEvent/mouseDrag', 'utils/keepRange'], function (View, tpl, launchFullScreen, mouseDrag, keepRange) {
   return View.extend({
     init: function(){
       View.prototype.init.apply(this, arguments);
     },
     template: tpl,
-    el: '#right',
+    el: '#play-wrap',
     eventHandlers: {
       'playSlide': 'onPlaySlide',
-      'getData': '$update',
-      'showSlide': 'onShowSlide'
+      'getData': 'onGetData',
+      'changeSlide': 'onChangeSlide'
     },
     behaviorHandlers: {
-      'onClick': function(e){
-        console.log(e.left);
-      },
-      'moveElemStart': 'moveElemStart',
-      'moveElemEnd': 'onMoveElemEnd'
+      'moveElemStart': 'onMoveElemStart',
+      'resizeElemStart': 'onResizeElemStart',
+      'removeElem': 'onRemoveElem',
+      'editElem': 'onEditElem'
     },
     onPlaySlide: function(){
       this.slideElem = this.slideElem || document.getElementById('play-wrap');
       launchFullScreen(this.slideElem);
     },
-    onShowSlide: function(n){
-      var length = this.data.page.length;
+    onGetData: function(data){
+      this.$update(data);
+      this.onChangeSlide(data.currentPage);
+    },
+    onChangeSlide: function(n){
+      var length = this.data.pages.length;
       if(n < length && n >= 0) {
         this.data.currentPage = n;
+        this.emit('showSlide', this.data.pages[n]);
       }
     },
-    moveElemStart: function(vm, evt){
+    onMoveElemStart: function(vm, evt){
       evt.preventDefault();
       var data = vm.$data,
-          mouseStartPos = {
-            x: evt.x,
-            y: evt.y
-          },
-          elemStartPos = {
-            x: data.left,
-            y: data.top
-          };
-      this.onMouseMove = domEvent.on('mousemove', function(pos){
-        data.left = elemStartPos.x + pos.x - mouseStartPos.x;
-        data.top = elemStartPos.y + pos.y - mouseStartPos.y;
+          startPosX = evt.x,
+          startPosY = evt.y,
+          startPosLeft = data.left,
+          startPosTop = data.top
+          maxLeft = 890 - data.width,
+          maxTop = 500 - data.height;
+      mouseDrag.onDrag(function(pos){
+        var left = startPosLeft + pos.x - startPosX,
+            top = startPosTop + pos.y - startPosY;
+        data.left = keepRange(left, 0, maxLeft);
+        data.top = keepRange(top, 0, maxTop);
       });
     },
-    onMoveElemEnd: function(){
-      domEvent.off(this.onMouseMove);
+    onResizeElemStart: function(vm, evt){
+      evt.preventDefault();
+      var data = vm.$data,
+          startPosX = evt.x,
+          startPosY = evt.y,
+          startWidth = data.width,
+          startHeight = data.height,
+          maxWidth = 890 - data.left,
+          maxHeight = 500 - data.top;
+      this.onMouseMove = mouseDrag.onDrag(function(pos){
+        var width = startWidth + pos.x - startPosX,
+            height = startHeight + pos.y - startPosY;
+        data.width = keepRange(width, 0, maxWidth);
+        data.height = keepRange(height, 0, maxHeight);  
+      });
     },
+    onRemoveElem: function(vm, type){
+      var currentPage = this.data.currentPage,
+          data = this.data.pages[currentPage][type],
+          index;
+      if(!data) {
+        throw Error('there is not data type: ' + type);
+      }
+      index = data.indexOf(vm.$data);
+      data[index] = null;
+      if(index !== -1) {
+        data.splice(index, 1);
+      }
+    },
+    onEditElem: function(vm){
+      this.onEditingElem(vm.$el, 'elem-editing');
+      this.emit('elemEdit', vm.$data);
+    },
+    onEditingElem: function(el, className){
+      if(this.editngElem) {
+        this.editngElem.classList.remove(className);
+      }
+      this.editngElem = el;
+      this.editngElem.classList.add(className);;
+    }
   });
-
 });

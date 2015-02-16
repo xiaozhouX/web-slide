@@ -4,7 +4,7 @@ define(['app/simple/basic', 'Vue', 'utils/event', 'utils/util'], function (Basic
       options = options || {};
       this.ds = options.dataSource;
       this.el = this.el || options.el || '';
-      this.data = this.data || options.data || '';
+      this.data = this.data || options.data || {};
       this.tpl = this.tpl || options.tpl || '';
       this.behaviorHandlers = convertHandler(this.behaviorHandlers, this);
       this.render();
@@ -31,7 +31,6 @@ define(['app/simple/basic', 'Vue', 'utils/event', 'utils/util'], function (Basic
     },
 
     $emit: function(evt, value){
-      console.log(arguments);
       this.vm.$emit(evt, value);
     },
 
@@ -50,9 +49,13 @@ define(['app/simple/basic', 'Vue', 'utils/event', 'utils/util'], function (Basic
       this.vm.$off.apply(this.vm, arguments);
     },
 
-    $update: function(data){
+    $update: function(data, key){
       if(data){
-        this.vm.$data = this.data = data;
+        if(_.isString(key)){
+          this.vm.$data[key] = this.data[key] = data;
+        }else {
+          this.vm.$data = this.data = data;
+        }
       }
     }
   });

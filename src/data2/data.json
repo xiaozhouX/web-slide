@@ -1,0 +1,21 @@
+{
+        "currentPage": 0,
+        "status": "unlink",
+        "pages": [{
+          "header": "标题1",
+          "content": "测试数据",
+          "images": [],
+          "transition": "expand"
+        },{
+          "header": "标题2",
+          "content": "测试数据2",
+          "transition": "expand",
+          "images": [{
+            "src": "./asset/test.jpg",
+            "left": 120,
+            "top": 200,
+            "height": 200,
+            "width": 200
+          }]
+        }]
+      }

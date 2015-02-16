@@ -2,6 +2,7 @@ define(function () {
   var Events = {
     on: function(type, fn, el) {
       el = el || document;
+      if(!fn) return;
       var callback = function(){
         var args = arguments;
         requestAnimationFrame(function(){
@@ -17,6 +18,14 @@ define(function () {
     },
     off: function(obj) {
       obj.el.removeEventListener(obj.type, obj.fn);
+    },
+    once: function(type, fn, el){
+      var self = this,
+          domEvent;
+      domEvent = this.on(type, function(){
+        fn.apply(null, arguments);
+        self.off(domEvent);
+      }, el);
     }
   };
   return Events;

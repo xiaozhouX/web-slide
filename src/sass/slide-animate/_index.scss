@@ -1,0 +1,14 @@
+@mixin slide-transition{
+  transition: all .8s ease .4s;
+  &.expand-enter {
+    opacity: 0;
+  }
+  &.expand-leave {
+    transition-delay: 0;
+    opacity: 0;
+  }
+}
+
+@import 'normal';
+@import 'rotation';
+@import 'flip';

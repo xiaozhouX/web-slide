@@ -1,6 +1,6 @@
 define(['app/simple/websocket'], function(Websocket) {
   return Websocket.extend({
-    url: 'ws://127.0.0.1:3000',
+    url: 'ws://slide-195173.apne1.nitrousbox.com:3000',
     _events: {
       'next': 'controlWS:nextPage',
       'prev': 'controlWS:prevPage',

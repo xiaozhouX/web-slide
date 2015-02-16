@@ -45,23 +45,20 @@ body {
     padding: 0; }
 
 #play-slide {
+  position: relative;
+  margin: 0 auto;
   height: 500px;
   width: 890px;
-  margin: 0 auto; }
+  overflow: hidden;
+  -webkit-perspective: 1000px; }
 
 .slide {
   box-sizing: border-box;
-  position: relative;
+  position: absolute;
   padding: 5px;
   width: 100%;
   height: 100%;
   background: white; }
-
-.slide {
-  transition: all .8s ease; }
-  .slide.expand-enter, .slide.expand-leave {
-    height: 0;
-    opacity: 0; }
 
 :-webkit-full-screen #play-slide {
   -webkit-transform: scale(1.536); }
@@ -74,6 +71,9 @@ body {
 :-webkit-full-screen .elem {
   border: none;
   background: transparent; }
+
+.elem-editing {
+  border-color: blue; }
 
 .header {
   margin: 70px auto 0;
@@ -102,18 +102,31 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
   border: none; }
 
-.control-bar {
-  margin: -5px;
+.elem-bar {
+  transform: translateZ(1px);
   width: 10px;
   height: 10px;
   display: block;
-  float: left;
-  content: ' ';
-  background: red;
-  border-radius: 5px;
-  transform: translateZ(1px); }
+  border-radius: 5px; }
 
-:-webkit-full-screen .control-bar {
+.elem-bar-move {
+  margin: -5px;
+  float: left;
+  background: red;
+  cursor: move; }
+
+.elem-bar-remove {
+  margin: -5px;
+  float: right;
+  background: red; }
+
+.elem-bar-size {
+  margin: -8px -6px;
+  float: right;
+  background: blue;
+  cursor: nw-resize; }
+
+:-webkit-full-screen .elem-size-bar, :-webkit-full-screen .elem-move-bar {
   display: none; }
 
 .media {
@@ -121,3 +134,91 @@ body {
   left: 0px;
   top: 0px; }
 
+#play-edit {
+  height: 80px; }
+
+.transition-normal {
+  transition: all .8s ease .4s; }
+  .transition-normal.expand-enter {
+    opacity: 0; }
+  .transition-normal.expand-leave {
+    transition-delay: 0;
+    opacity: 0; }
+
+.transition-rotation-left {
+  transition: all .8s ease .4s;
+  transform-origin: 0 0; }
+  .transition-rotation-left.expand-enter {
+    opacity: 0; }
+  .transition-rotation-left.expand-leave {
+    transition-delay: 0;
+    opacity: 0; }
+  .transition-rotation-left.expand-enter, .transition-rotation-left.expand-leave {
+    transform: rotateY(-90deg); }
+  .transition-rotation-left.expand-leave {
+    transform: rotateY(90deg); }
+
+.transition-rotation-right {
+  transition: all .8s ease .4s;
+  transform-origin: 100% 0; }
+  .transition-rotation-right.expand-enter {
+    opacity: 0; }
+  .transition-rotation-right.expand-leave {
+    transition-delay: 0;
+    opacity: 0; }
+  .transition-rotation-right.expand-enter, .transition-rotation-right.expand-leave {
+    transform: rotateY(90deg); }
+  .transition-rotation-right.expand-leave {
+    transform: rotateY(-90deg); }
+
+.transition-rotation-top {
+  transition: all .8s ease .4s;
+  transform-origin: 0 0; }
+  .transition-rotation-top.expand-enter {
+    opacity: 0; }
+  .transition-rotation-top.expand-leave {
+    transition-delay: 0;
+    opacity: 0; }
+  .transition-rotation-top.expand-enter, .transition-rotation-top.expand-leave {
+    transform: rotateX(90deg); }
+  .transition-rotation-top.expand-leave {
+    transform: rotateX(-90deg); }
+
+.transition-rotation-bottom {
+  transition: all .8s ease .4s;
+  transform-origin: 0 100%; }
+  .transition-rotation-bottom.expand-enter {
+    opacity: 0; }
+  .transition-rotation-bottom.expand-leave {
+    transition-delay: 0;
+    opacity: 0; }
+  .transition-rotation-bottom.expand-enter, .transition-rotation-bottom.expand-leave {
+    transform: rotateX(-90deg); }
+  .transition-rotation-bottom.expand-leave {
+    transform: rotateX(90deg); }
+
+.transition-flip-x {
+  transition: all .8s ease .4s;
+  transform-origin: 50% 50%; }
+  .transition-flip-x.expand-enter {
+    opacity: 0; }
+  .transition-flip-x.expand-leave {
+    transition-delay: 0;
+    opacity: 0; }
+  .transition-flip-x.expand-enter {
+    transform: rotateX(-90deg); }
+  .transition-flip-x.expand-leave {
+    transform: rotateX(90deg); }
+
+.transition-flip-y {
+  transition: all .8s ease .4s;
+  transform-origin: 50% 50%; }
+  .transition-flip-y.expand-enter {
+    opacity: 0; }
+  .transition-flip-y.expand-leave {
+    transition-delay: 0;
+    opacity: 0; }
+  .transition-flip-y.expand-enter {
+    transform: rotateY(-90deg); }
+  .transition-flip-y.expand-leave {
+    transform: rotateY(90deg); }

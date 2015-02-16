@@ -4,6 +4,7 @@ define(['app/simple/basic', 'utils/event'], function(Basic, Event) {
     connect: function (){
       var wsServer = this.url || DEFAULT_URL,
           ws = this.ws = new WebSocket(wsServer);
+          console.log(ws);
       this._initEvents();
       return new Promise(function(resolve, reject){
         ws.onopen = resolve;

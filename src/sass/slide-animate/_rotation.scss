@@ -1,0 +1,44 @@
+.transition-rotation-left{
+  @include slide-transition;
+    transform-origin: 0 0;
+  &.expand-enter, &.expand-leave {
+    transform: rotateY(-90deg);
+  }
+  &.expand-leave {
+    transform: rotateY(90deg);
+  }
+}
+
+.transition-rotation-right{
+  @include slide-transition;
+    transform-origin: 100% 0;
+  &.expand-enter, &.expand-leave {
+    transform: rotateY(90deg);
+  }
+  &.expand-leave {
+    transform: rotateY(-90deg);
+  }
+}
+
+.transition-rotation-top{
+  @include slide-transition;
+    transform-origin: 0 0;
+  &.expand-enter, &.expand-leave {
+    transform: rotateX(90deg);
+  }
+  &.expand-leave {
+    transform: rotateX(-90deg);
+  }
+}
+
+.transition-rotation-bottom{
+  @include slide-transition;
+    transform-origin: 0 100%;
+  &.expand-enter, &.expand-leave {
+    transform: rotateX(-90deg);
+  }
+  &.expand-leave {
+    transform: rotateX(90deg);
+  }
+}
+

@@ -3,6 +3,7 @@ define(['app/simple/view', 'tpl!app/template/control.tpl', 'app/dataSource/slide
     init: function(options){
       View.prototype.init.apply(this, arguments);
       this.ws = this.ws || new slideControlWS(this.ws);
+      this.ds = options.dataSource;
       this.id = '123';
     },
     template: tpl,
@@ -12,15 +13,16 @@ define(['app/simple/view', 'tpl!app/template/control.tpl', 'app/dataSource/slide
         this.emit('playSlide');
       },
       'onAdd': function(){
-        var length = this.data.page.length;
-        this.data.page.push({
+        var length = this.data.pages.length;
+        this.data.pages.push({
          header: '标题' + length,
          content: '内容...',
-         transition: 'expand'
+         transition: 'normal',
+         images: []
         });
       },
       'changeSlide': function(n) {
-        this.emit('showSlide', n);
+        this.emit('changeSlide', n);
       },
       'onConnect': function() {
         var self = this,
@@ -33,24 +35,24 @@ define(['app/simple/view', 'tpl!app/template/control.tpl', 'app/dataSource/slide
           self.emit('playSlide');
         })
       },
-      'onTest': function(){
-        console.log(this.data.page[1].images[0].left);
-        this.data.page[1].images[0].left = this.data.page[1].images[0].left +100;
+      'onSave': function(){
+        console.log(this.data);
+        this.ds.update(this.data);
       }
     },
     eventHandlers: {
       "controlWS:nextPage": function(){
-         this.emit('showSlide', this.data.currentPage + 1);
+         this.emit('changeSlide', this.data.currentPage + 1);
       },
       'controlWS:prevPage': function(){
-         this.emit('showSlide', this.data.currentPage - 1);
+         this.emit('changeSlide', this.data.currentPage - 1);
       },
       'controlWS:firstPage': function(){
-         this.emit('showSlide', 0);
+         this.emit('changeSlide', 0);
       }
     },
     onChangeSlide: function(n) {
-      var length = this.data.page.length;
+      var length = this.data.pages.length;
       if(n < length && n >= 0) {
         this.data.currentPage = n;
       }
@@ -58,39 +60,21 @@ define(['app/simple/view', 'tpl!app/template/control.tpl', 'app/dataSource/slide
     onKeyDown: function(e){
       key = e.keyCode;
       if(key === 39 || key === 40) {
-      this.emit('showSlide', this.data.currentPage + 1);
+      this.emit('changeSlide', this.data.currentPage + 1);
       }
       if(key === 37 || key === 38) {
-      this.emit('showSlide', this.data.currentPage - 1);
+      this.emit('changeSlide', this.data.currentPage - 1);
       }
     },
     startControl: function(){
       var self = this;
-      this.data = {
-        currentPage: 0,
-        status: 'unlink',
-        page: [{
-          header: '标题1',
-          content: '测试数据',
-          transition: 'expand'
-        },{
-          header: '标题2',
-          content: '测试数据2',
-          transition: 'expand',
-          images: [{
-            src: './asset/test.jpg',
-            left: 120,
-            top: 200,
-            height: 200,
-            width: 200
-          }]
-        }]
-      };
-      this.vm.$data = this.data;
+      this.ds.load().then(function(result){
+        self.vm.$data = self.data = result.data;
+        self.emit('getData', self.data);
+      });
       document.addEventListener('keydown', function(e){
         self.onKeyDown(e);
       });
-      this.emit('getData', this.data);
     }
   });
 })

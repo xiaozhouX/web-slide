@@ -10,6 +10,9 @@ define(function () {
       dataSource: slideData,
       appConfig: appConfig,
     });
+    var editlView = new View.EditView({
+      appConfig: appConfig,
+    });
     controlView.startControl();
   }
 });

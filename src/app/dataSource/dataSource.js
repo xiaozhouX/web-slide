@@ -27,20 +27,47 @@ define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
             if (http_request.readyState == 4) { 
               if (http_request.status == 200) {
                 resolve(JSON.parse(http_request.responseText)); 
-              } else { 
+              } else {
                 reject('There was a problem with the request.');
               }
             }
           };
         });
     },
-    load: function(url, options){
-      url = makeGetUrl(url, options);
-      return this._load(url, 'GET', null);
+    _loadFromLocal: function(url){
+      return localStorage.getItem('data:' + url || '');
     },
-    update: function(url, options){
-      var data = JSON.stringify(options);
-      return this.load(url, 'POST', data)
+    load: function(options){
+      var url = (options && options.url) || this.url,
+          data = (options && options.data) || {},
+          self = this;
+      finalUrl = makeGetUrl(url, data);
+      return this._load(finalUrl, 'GET', null).then(function(data){
+        return Promise.resolve({
+          from: 'remote',
+          data: data
+        });
+      }, function(e){
+        var data;
+        if(self.cache){
+          data = JSON.parse(self._loadFromLocal(url) || null);
+          if(data){
+            return Promise.resolve({
+              from: 'local',
+              data: data
+            });
+          }
+        }
+        return Promise.reject(e);
+      });
+    },
+    update: function(options){
+      var data = JSON.stringify(options),
+          url = this.url;
+      if(this.cache){
+        localStorage.setItem('data:' + url, data);
+      }
+      return this.load(url, 'POST', data);
     }
   });
 });
