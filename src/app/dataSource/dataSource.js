@@ -1,6 +1,6 @@
 define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
   return Basic.extend({
-    _load: function (url, method, data){
+    _loadData: function (url, method, data){
       var http_request; 
         if (window.XMLHttpRequest) { 
           http_request = new XMLHttpRequest(); 
@@ -37,12 +37,12 @@ define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
     _loadFromLocal: function(url){
       return localStorage.getItem('data:' + url || '');
     },
-    load: function(options){
+    _load: function(options){
       var url = (options && options.url) || this.url,
           data = (options && options.data) || {},
           self = this;
       finalUrl = makeGetUrl(url, data);
-      return this._load(finalUrl, 'GET', null).then(function(data){
+      return this._loadData(finalUrl, 'GET', null).then(function(data){
         return Promise.resolve({
           from: 'remote',
           data: data
@@ -61,9 +61,9 @@ define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
         return Promise.reject(e);
       });
     },
-    update: function(options){
-      var data = JSON.stringify(options),
-          url = this.url;
+    _update: function(options){
+      var data = JSON.stringify(options.data),
+          url = (options && options.url) || this.url;
       if(this.cache){
         localStorage.setItem('data:' + url, data);
       }

@@ -1,6 +1,19 @@
 define(['./dataSource'], function (DataSource) {
+  var updateUrl = '/data/update',
+      getUrl = '/data/get';
   return DataSource.extend({
-    url: './data/data.json',
     cache: true,
+    load: function(data){
+      return this._load({
+        url: getUrl,
+        data: data,
+      });
+    },
+    update: function(data){
+      return this._updata({
+        url: updateUrl,
+        data: data
+      });
+    }
   });
 });

@@ -12,7 +12,6 @@ server.on('upgrade', function(request, socket, body) {
 
     ws.on('message', function(event) {
       var data = event.data;
-      console.log(data);
       if(data.indexOf('#verify') === 0){   
         wsAll['client'] = ws;
         ws.send('verifySuccess');
