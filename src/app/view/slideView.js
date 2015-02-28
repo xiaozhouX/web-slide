@@ -1,7 +1,8 @@
-define(['app/simple/view', 'tpl!app/template/slide.tpl', 'utils/launchFullScreen', 'utils/domEvent/mouseDrag', 'utils/keepRange'], function (View, tpl, launchFullScreen, mouseDrag, keepRange) {
+define(['app/simple/view', 'tpl!app/template/slide.tpl', 'utils/fullscreen', 'utils/domEvent/mouseDrag', 'utils/keepRange'], function (View, tpl, fullscreen, mouseDrag, keepRange) {
   return View.extend({
     init: function(){
       View.prototype.init.apply(this, arguments);
+      this._fullScreenInit();
     },
     template: tpl,
     el: '#play-wrap',
@@ -17,9 +18,15 @@ define(['app/simple/view', 'tpl!app/template/slide.tpl', 'utils/launchFullScreen
       'removeElem': 'onRemoveElem',
       'editElem': 'onEditElem'
     },
+    _fullScreenInit: function() {
+      var self = this;
+      this.fullscreen = fullscreen.init(this.vm.$el, function(){
+      }, function(){
+        self.emit('exitPlaySlide');
+      });
+    },
     onPlaySlide: function(){
-      this.slideElem = this.slideElem || document.getElementById('play-wrap');
-      launchFullScreen(this.slideElem);
+      this.fullscreen.lanuchFullScreen();
     },
     onClickSlide: function(){
       this.emit('cancelElemEdit');

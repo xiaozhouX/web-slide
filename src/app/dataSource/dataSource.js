@@ -1,7 +1,8 @@
 define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
   return Basic.extend({
     _loadData: function (url, method, data){
-      var http_request; 
+      var self = this,
+          http_request; 
         if (window.XMLHttpRequest) { 
           http_request = new XMLHttpRequest(); 
         } else if (window.ActiveXObject) { 
@@ -26,7 +27,8 @@ define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
           http_request.onreadystatechange =  function() { 
             if (http_request.readyState == 4) { 
               if (http_request.status == 200) {
-                resolve(JSON.parse(http_request.responseText)); 
+                self.data = JSON.parse(http_request.responseText);
+                resolve(self.data); 
               } else {
                 reject('There was a problem with the request.');
               }
@@ -67,7 +69,7 @@ define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
       if(this.cache){
         localStorage.setItem('data:' + url, data);
       }
-      return this.load(url, 'POST', data);
+      return this._loadData(url, 'POST', data);
     }
   });
 });

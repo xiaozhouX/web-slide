@@ -4,12 +4,15 @@ define(['app/simple/basic', 'utils/event'], function(Basic, Event) {
     connect: function (){
       var wsServer = this.url || DEFAULT_URL,
           ws = this.ws = new WebSocket(wsServer);
-          console.log(ws);
       this._initEvents();
-      return new Promise(function(resolve, reject){
+      this.connection = new Promise(function(resolve, reject){
         ws.onopen = resolve;
         ws.onerror = reject;
       });
+      return this.connection;
+    },
+    close: function(){
+      this.ws.close();
     },
     events: {},
     _initEvents: function(){
@@ -24,11 +27,13 @@ define(['app/simple/basic', 'utils/event'], function(Basic, Event) {
       };
     },
     _onMessage: function(evt){
-      var data = evt.data;
-      console.log(data);
-      var msg = this._events[data] || data;
+      var msg = evt.data,
+          dataArray = msg.split('#'),
+          action = dataArray.shift(),
+          data = dataArray,
+          sendMsg = this._events[action] || action;
       if(msg) {
-        this.emit(msg);
+        this.emit(sendMsg, data);
       }
     },
     _onClose: function(){

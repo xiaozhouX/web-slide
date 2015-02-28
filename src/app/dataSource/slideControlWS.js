@@ -1,23 +1,40 @@
 define(['app/simple/websocket'], function(Websocket) {
   return Websocket.extend({
-    url: 'ws://slide-195173.apne1.nitrousbox.com:3000',
     _events: {
-      'next': 'controlWS:nextPage',
-      'prev': 'controlWS:prevPage',
-      'restart': 'controlWS:firstPage',
-      'exit': 'controlWS:exit',
-      'verifySuccess': 'controlWS:verifySuccess'
+      'verifySuccess': 'controlWS:verifySuccess',
+      'play': 'controlWS:play',
+      'join': 'controlWS:member',
+      'left': 'controlWS:member'
     },
-    verify: function(id) {
+    data: {
+      status: 'unlink',
+      controlPic: '',
+      connectCode:'',
+      onlineNum: 1,
+    },
+    verify: function(id, pw) {
+        // self.data.controlPic = 'http://qr.liantu.com/api.php?text=localhost:3000/control/remote.html';
       var self = this;
       if(this.ws) {
-        this.send('#verify ' + id);
+        pw = pw || 'free';
+        this.send('verify#' + id + '#' + pw);
       }
-      return new Promise(function(resolve, reject){
-        self.on('controlWS:verifySuccess', function(){
-          resolve();
+      return this.connection.then(function() {
+        self.data.status = 'linking...';
+        return new Promise(function(resolve, reject){
+          self.on('controlWS:verifySuccess', function(data){
+            var num = parseInt(data[0]);
+            self.data.onlineNum = num;
+            self.data.status = 'link';
+            resolve(data);
+          });
         });
       });
     },
+    close: function() {
+      Websocket.prototype.close.apply(this, arguments);
+      this.data.onlineNum = 1;
+      this.data.status = 'unlink'
+    }
   });
 });
