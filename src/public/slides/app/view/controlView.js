@@ -1,8 +1,8 @@
-define(['app/simple/view', 'tpl!app/template/control.tpl', 'app/dataSource/slideControlWS'], function (View, tpl, slideControlWS) {
+define(['app/simple/view', 'tpl!app/template/control.tpl'], function (View, tpl) {
   return View.extend({
     init: function(options){
       View.prototype.init.apply(this, arguments);
-      this.ws = this.ws || new slideControlWS(this.ws);
+      this.ws = options.websocket;
       this.id = 'test';
     },
     template: tpl,

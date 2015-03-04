@@ -6,9 +6,7 @@ define(['app/simple/basic', 'utils/event', 'utils/util'], function(Basic, Event,
       this._initHandler();
     },
     _initHandler: function(){
-      console.log(this.events);
       this.events = _.convertHandler(this.events, this);
-      console.log(this.events);
     },
     connect: function (){
       var wsServer = this.url || DEFAULT_URL,

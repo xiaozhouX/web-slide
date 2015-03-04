@@ -1,5 +1,6 @@
 define(function () {
   return {
+    url: '192.168.1.110:3000',
     allowFullScreen: true,
     fullScreenScale : function(elem){
       var widthScale = screen.width / elem.clientWidth,

@@ -1,5 +1,6 @@
-define(['./slide'], function (SlideDateSource) {
+define(['./slide', './slideControlWS'], function (SlideDateSource, SlideControlWS) {
   return {
-    SlideDataSource: SlideDateSource
+    SlideDataSource: SlideDateSource,
+    SlideControlWS: SlideControlWS
   };
 });
