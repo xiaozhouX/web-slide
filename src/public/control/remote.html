@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+  var hostname = location.hostname,
+      port = location.port;
+    var curPage = 0;
+  ws = new WebSocket('ws://' + hostname + ':' + port);
+    function connect () {
+      var connectCode = document.getElementById('connectCode').value || 'free';
+      var id = 'test',
+          action = 'verify';
+      ws.send(action + '#' + id + '#' + connectCode);
+    }
+    function restart () {
+      curPage = 0;
+      ws.send('play#' + curPage);
+      showPage(curPage);
+    }
+    function nextPage () {
+        curPage++;
+        ws.send('play#' + curPage);
+      showPage(curPage);
+    }
+    function prevPage () {
+      if(curPage > 0){
+        curPage --;
+        ws.send('play#' + curPage);
+      }
+      showPage(curPage);
+    }
+    function exit () {
+      var action = 'exit';
+      ws.send('play#exit')
+    }
+
+    var page = document.getElementById('page');
+    function showPage(str) {
+      page.innerHTML = str;
+    }
+
+
+  </script>
+  <input type="text" id="connectCode">
+  <button onClick="connect()">连接</button>
+  <button onClick="restart()">第一页</button>
+  <button onClick="nextPage()">下一页</button>
+  <button onClick="prevPage()">上一页</button>
+  <button onClick="exit">退出</button>
+</body>
+</html>
