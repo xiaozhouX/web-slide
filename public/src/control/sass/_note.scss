@@ -1,0 +1,40 @@
+.note {
+  position: absolute;
+  bottom: 0px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+  height: 70%;
+  overflow: scroll;
+  z-index: 2;
+  color: white;
+  font-size: 2.2em;
+  word-break: break-all;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.note-enter {
+  -webkit-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  transform: translateY(100%);
+  -webkit-transition: -webkit-transform .3s ease-in;
+  transition: transform .3s ease-in;
+}
+.note-enter.note-enter-active {
+  -webkit-transform: translateY(0);
+  -ms-transform: translateY(0);
+  transform: translateY(0);
+}
+.note-leave {
+  -webkit-transform: translateY(0);
+  -ms-transform: translateY(0);
+  transform: translateY(0);
+  -webkit-transition: -webkit-transform .3s ease-in;
+  transition: transform .3s ease-in;
+}
+.note-leave.note-leave-active {
+  -webkit-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  transform: translateY(100%);
+}

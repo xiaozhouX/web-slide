@@ -2,35 +2,46 @@ var gulp = require('gulp');
 var server = require('gulp-express');
 var path = require('path');
 var sass = require('gulp-sass');
-
-var sourcePath = '../src',
-    modelFile = path.join(sourcePath, 'model', '*.js'),
-    sockseFile = path.join(sourcePath, 'socket', '*.js'),
-    appFile = path.join(sourcePath, 'app.js'),
-    publicPath = path.join(sourcePath, 'public'),
-    startPath = path.join(sourcePath, 'bin/www');
-
+var rootPath = '../',
+  serverPath = path.join(rootPath, 'server'),
+  sourcePath = path.join(rootPath, 'public/src'),
+  modelFile = path.join(serverPath, 'model', '*.js'),
+  sockseFile = path.join(serverPath, 'socket', '*.js'),
+  appFile = path.join(rootPath, 'app.js'),
+  utilsFile = path.join(sourcePath, 'utils', '**/*.js'),
+  startPath = path.join(rootPath, 'bin/www');
 var filePath = {
   'slides': {
-    jsFile: [path.join(publicPath, 'slides/app', '**/*.js'), path.join(publicPath, 'slides/utils', '**/*.js')],
-    sassFile: [path.join(publicPath, 'slides/sass', '**/*.scss')],
-    cssFile: [path.join(publicPath, 'slides/css', 'style.css')],
-    cssPath: [path.join(publicPath, 'slides/css/')],
-    assetFile: [path.join(publicPath, 'slides/asset', '*.*')],
-    htmlFile: [path.join(publicPath, 'slides/index.html')],
+    jsFile: [path.join(sourcePath, 'slides/app', '**/*.js')],
+    rootPath: [path.join(__dirname, sourcePath, 'slides')],
+    sassFile: [path.join(sourcePath, 'slides/sass', '**/*.scss')],
+    cssFile: [path.join(sourcePath, 'slides/css', 'style.css')],
+    cssPath: [path.join(sourcePath, 'slides/css/')],
+    assetFile: [path.join(sourcePath, 'slides/asset', '*.*')],
+    htmlFile: [path.join(sourcePath, 'slides/index.html')],
   },
   'control': {
-    jsFile: [path.join(publicPath, 'control/app', '**/*.js'), path.join(publicPath, 'control/utils', '**/*.js')],
-    sassFile: [path.join(publicPath, 'control/sass', '**/*.scss')],
-    cssFile: [path.join(publicPath, 'control/css', 'style.css')],
-    cssPath: [path.join(publicPath, 'control/css/')],
-    assetFile: [path.join(publicPath, 'control/asset', '*.*')],
-    htmlFile: [path.join(publicPath, 'control/index.html')],
+    jsFile: [path.join(sourcePath, 'control/app', '**/*.js'), path.join(sourcePath, 'control/app', '**/*.jsx')],
+    rootPath: [path.join(__dirname, sourcePath, 'control')],
+    sassFile: [path.join(sourcePath, 'control/sass', '**/*.scss')],
+    cssFile: [path.join(sourcePath, 'control/css', 'style.css')],
+    cssPath: [path.join(sourcePath, 'control/css/')],
+    assetFile: [path.join(sourcePath, 'control/asset', '*.*')],
+    htmlFile: [path.join(sourcePath, 'control/index.html')],
   }
 };
 
-function reload(htmlFile){
-  htmlFile.forEach(function(value){
+function getPageName (pagePath) {
+  for(var key in filePath) {
+    if(pagePath.indexOf(filePath[key].rootPath[0]) !== -1) {
+      return key;
+    }
+  }
+  return 'all';
+}
+
+function reload(htmlFile) {
+  htmlFile.forEach(function(value) {
     var event = {
       type: 'changed',
       path: value
@@ -40,51 +51,44 @@ function reload(htmlFile){
 }
 
 function resass(sassFile, cssPath) {
-  for(var i = 0; i < sassFile.length; i++ ){
-    gulp.src(sassFile[i])
-        .pipe(sass())
-        .pipe(gulp.dest(cssPath[i]));
+  for (var i = 0; i < sassFile.length; i++) {
+    gulp.src(sassFile[i]).pipe(sass()).pipe(gulp.dest(cssPath[i]));
   }
 }
 
-function registerServer(pageName) {
-  var taskFilePath, taskName, reloadFiles, temp, value;
-  if(pageName) {
-    taskName = '-' + pageName;
-    taskFilePath = filePath[pageName];
-  }else {
-    taskName = '';
-    taskFilePath = {};
-    for(var page in filePath) {
-      for(var key in filePath[page]) {
-        temp = taskFilePath[key];
-        value = filePath[page][key];
-        taskFilePath[key] = temp ? temp.concat(value) : value;
-      }
+function registerFilePath(filePath) {
+  var allPath = {}, temp, value;
+   for (var page in filePath) {
+    for (var key in filePath[page]) {
+      temp = allPath[key];
+      value = filePath[page][key];
+      allPath[key] = temp ? temp.concat(value) : value;
     }
   }
-  gulp.task('server' + taskName, function () {
+  filePath['all'] = allPath;
+}
+
+gulp.task('server', function() {
     server.run([startPath]);
-    reloadFiles = [].concat(taskFilePath.htmlFile, taskFilePath.cssFile, taskFilePath.assetFile, taskFilePath.jsFile)
-    gulp.watch(reloadFiles, function(){
-      reload(taskFilePath.htmlFile);
+    taskFilePath = filePath['all'];
+    reloadFiles = [].concat(utilsFile, taskFilePath.htmlFile, taskFilePath.cssFile, taskFilePath.assetFile, taskFilePath.jsFile)
+    gulp.watch(reloadFiles, function(evt) {
+      var key = getPageName(evt.path),
+          htmlFile = filePath[key].htmlFile;
+      reload(htmlFile);
     });
-    gulp.watch([taskFilePath.sassFile], function(){
-      resass(taskFilePath.sassFile, taskFilePath.cssPath);
+    gulp.watch([taskFilePath.sassFile], function(evt) {
+      var key = getPageName(evt.path),
+          sassFile = filePath[key].sassFile,
+          cssPath = filePath[key].cssPath;
+      resass(sassFile, cssPath);
     });
-    gulp.watch([modelFile, appFile, sockseFile], function(){
-      reload(taskFilePath.htmlFile);
+    gulp.watch([modelFile, appFile, sockseFile], function(evt) {
       server.stop()
       server.run([startPath]);
+      reload(taskFilePath.htmlFile);
     });
-  });
-}
+});
 
-
-registerServer();
-var page = ['slides', 'control'];
-for(var i = 0, l = page.length; i < l; i++) {
-  registerServer(page[i]);
-}
-
+registerFilePath(filePath);
 gulp.task('default', ['server']);

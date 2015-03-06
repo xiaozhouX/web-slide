@@ -1,0 +1,29 @@
+  #left {
+    float: left;
+    width: 24%;
+    border-right: 1px solid black;
+    height: 500px;
+ }
+ .play-control {
+   height: 200px;
+   text-align: center;
+   padding: 130px 0 0;
+}
+.control-button {
+  width: 100px;
+  height: 30px;
+  margin-right: 20px;
+}
+.play-list {
+  height: 250px;
+  overflow-y: scroll;
+}
+.play-list-title {
+  width: 100%;
+  line-height: 26px;
+  background: #E8E8E8;
+  border-bottom: 1px solid #ccc;
+}
+.current-page {
+  background: #ccc;
+}

@@ -1,0 +1,96 @@
+.transition-rotation-corner{
+  @include slide-transition;
+    -webkit-transform-origin: 0 0;
+        -ms-transform-origin: 0 0;
+            transform-origin: 0 0;
+  &.expand-enter, &.expand-leave {
+    -webkit-transform: rotateZ(180deg);
+            transform: rotateZ(180deg);
+  }
+  &.expand-leave {
+    -webkit-transform: rotateZ(-180deg);
+            transform: rotateZ(-180deg);
+  }
+}
+
+.transition-rotation-center{
+  @include slide-transition;
+    -webkit-transform-origin: 50% 50%;
+        -ms-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+  &.expand-enter, &.expand-leave {
+    -webkit-transform: scale(0);
+        -ms-transform: scale(0);
+            transform: scale(0);
+    -webkit-transform: rotateZ(360deg);
+            transform: rotateZ(360deg);
+  }
+  &.expand-leave {
+    -webkit-transform: scale(0);
+        -ms-transform: scale(0);
+            transform: scale(0);
+    -webkit-transform: rotateZ(-360deg);
+            transform: rotateZ(-360deg);
+  }
+}
+
+.transition-rotation-left{
+  @include slide-transition;
+    -webkit-transform-origin: 0 0;
+        -ms-transform-origin: 0 0;
+            transform-origin: 0 0;
+  &.expand-enter, &.expand-leave {
+    -webkit-transform: rotateY(-90deg);
+            transform: rotateY(-90deg);
+  }
+  &.expand-leave {
+    -webkit-transform: rotateY(90deg);
+            transform: rotateY(90deg);
+  }
+}
+
+.transition-rotation-right{
+  @include slide-transition;
+    -webkit-transform-origin: 100% 0;
+        -ms-transform-origin: 100% 0;
+            transform-origin: 100% 0;
+  &.expand-enter, &.expand-leave {
+    -webkit-transform: rotateY(90deg);
+            transform: rotateY(90deg);
+  }
+  &.expand-leave {
+    -webkit-transform: rotateY(-90deg);
+            transform: rotateY(-90deg);
+  }
+}
+
+.transition-rotation-top{
+  @include slide-transition;
+    -webkit-transform-origin: 0 0;
+        -ms-transform-origin: 0 0;
+            transform-origin: 0 0;
+  &.expand-enter, &.expand-leave {
+    -webkit-transform: rotateX(90deg);
+            transform: rotateX(90deg);
+  }
+  &.expand-leave {
+    -webkit-transform: rotateX(-90deg);
+            transform: rotateX(-90deg);
+  }
+}
+
+.transition-rotation-bottom{
+  @include slide-transition;
+    -webkit-transform-origin: 0 100%;
+        -ms-transform-origin: 0 100%;
+            transform-origin: 0 100%;
+  &.expand-enter, &.expand-leave {
+    -webkit-transform: rotateX(-90deg);
+            transform: rotateX(-90deg);
+  }
+  &.expand-leave {
+    -webkit-transform: rotateX(90deg);
+            transform: rotateX(90deg);
+  }
+}
+
