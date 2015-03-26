@@ -45,10 +45,14 @@ define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
         self = this;
       finalUrl = makeGetUrl(url, data);
       return this._loadData(finalUrl, 'GET', null).then(function (data) {
-        return Promise.resolve({
-          from: 'remote',
-          data: data
-        });
+        if(data.status === 1){
+          return Promise.resolve({
+            from: 'remote',
+            data: data.result
+          });
+        } else {
+          return Promise.reject(data.result)
+        }
       }, function (e) {
         var data;
         if (self.cache) {

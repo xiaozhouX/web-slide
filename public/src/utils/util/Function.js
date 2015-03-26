@@ -1,4 +1,4 @@
-define(['./Array', './Lang'], function(Arr, Lang) {
+define(['./array', './lang'], function(Arr, Lang) {
       var _ = {} ;
   function ftl(array) {
     var length = array.length,

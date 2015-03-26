@@ -2,23 +2,54 @@ var express = require('express');
 var data = express();
 var fs = require('fs');
 var path = require('path');
-
+var mongodb = require('mongodb');
 var dataPath = path.join(__dirname, 'data.json');
-data.get('/get', function(req, res){
-  fs.readFile(dataPath, function (err, file) {
-      if (err) {
-          res.status(400).end(err);
-      } else {
-          res.set('Content-Type', 'application/json; charset=utf-8');
-          res.send(file);
-      }
+var getCallback = require('./get');
+var updateCallback = require('./update');
+data.get('/get', function (req, res) {
+  var id = req.query.id;
+  var sendJson = makeSendJsonFn(res);
+  getDataCallback(getCallback, sendJson, {
+    id: id
   });
 });
-data.post('/update', function(req, res){
-  fs.writeFile(dataPath, JSON.stringify(req.body), function(){
-    res.send('Hello World');
-  console.log(req.body);
-  });
+data.post('/update', function (req, res) {
+  var body = req.body, sendJson;
+  if(body) {
+    id = body.id;
+    data = body.data;
+    sendJson = makeSendJsonFn(res);
+    getDataCallback(updateCallback, sendJson, {
+      id: id,
+      data: data
+    });
+  } else {
+    res.send({
+      status: 0,
+      result: 'Data is Null'
+    });
+  }
 });
+
+function makeSendJsonFn(res){
+  return function(data){
+    res.set('Content-Type', 'application/json; charset=utf-8');
+    res.send(data);
+  }
+}
+
+function getDataCallback(cb, sendJson, options){
+  cb(options, function (result) {
+    sendJson({
+      status: 1,
+      result: result
+    });
+  }, function(error){
+    sendJson({
+      status: 0,
+      result: 'Error: ' + error
+    });
+  });
+}
 
 module.exports = data;

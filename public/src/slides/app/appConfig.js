@@ -1,6 +1,7 @@
 define(function () {
   return {
-    url: '192.168.1.102:3000',
+    url: location.hostname + ':' + location.port,
+    controlUrl: location.href.replace('slides', 'control'),
     allowFullScreen: true,
     fullScreenScale: function (elem) {
       var widthScale = screen.width / elem.clientWidth,

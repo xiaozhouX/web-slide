@@ -3,7 +3,7 @@ define(['app/simple/view', 'tpl!app/template/control.tpl'], function (View, tpl)
     init: function (options) {
       View.prototype.init.apply(this, arguments);
       this.ws = options.websocket;
-      this.id = 'test';
+      this.id = '0';
     },
     template: tpl,
     el: '#left',
@@ -43,10 +43,15 @@ define(['app/simple/view', 'tpl!app/template/control.tpl'], function (View, tpl)
       this.emit('changeSlide', n);
     },
     onSaveSlide: function () {
-      this.ds.update(this.data.slideData);
+      this.ds.update({
+        id: this.id,
+        data: this.data.slideData
+      });
     },
     onAddPage: function () {
       this.ds.addPage();
+      var slideData = this.data.slideData
+      slideData.currentPage = slideData.pages.length - 1;
     },
     onDelPage: function () {
       this.ds.delPage();
@@ -85,7 +90,9 @@ define(['app/simple/view', 'tpl!app/template/control.tpl'], function (View, tpl)
     startControl: function () {
       var self = this;
       this.data.remote = this.ws.data;
-      this.ds.load().then(function (result) {
+      this.ds.load({
+        id: this.id
+      }).then(function (result) {
         self.data.slideData = result.data;
         self.emit('getData', result.data);
       });

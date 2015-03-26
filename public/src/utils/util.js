@@ -1,3 +1,3 @@
-define('utils/util', ['./util/Array', './util/Lang', './util/Function'], function(Array, Lang, Fn) {
-  return Lang.extend({}, Array, Lang, Fn);
+define('utils/util', ['./util/array', './util/lang', './util/function'], function(_Array, _Lang, _Fn) {
+  return _Lang.extend({}, _Array, _Lang, _Fn);
 });

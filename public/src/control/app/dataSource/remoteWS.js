@@ -1,4 +1,4 @@
-define(function() {
+ define(function() {
   var hostname = location.hostname,
     port = location.port;
   var curPage = 0,
@@ -19,7 +19,7 @@ define(function() {
   function verify() {
     // var connectCode = document.getElementById('connectCode').value || 'free';
     var connectCode = 'free';
-    var id = 'test',
+    var id = '0',
       action = 'verify';
     ws.send(action + '#' + id + '#' + connectCode);
   }

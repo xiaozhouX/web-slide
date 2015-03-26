@@ -27,7 +27,7 @@ define(['app/simple/websocket', 'utils/util/lang'], function (Websocket, _) {
           self.once('controlWS:verifySuccess', function (data) {
             self.data.onlineNum = data;
             self.data.status = 'link';
-            self.data.controlPic = 'http://qr.liantu.com/api.php?text=' + self.appConfig.url + '/src/control/index.html';
+            self.data.controlPic = 'http://qr.liantu.com/api.php?text=' + self.appConfig.controlUrl;
             resolve(data);
           });
         });

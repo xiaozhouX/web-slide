@@ -7,6 +7,10 @@ define(['./dataSource'], function (DataSource) {
       return this._load({
         url: getUrl,
         data: data,
+      }).then(function(result){
+        result.data.currentPage = 0;
+        result.data.status = "unlink";
+        return Promise.resolve(result);
       });
     },
     update: function (data) {

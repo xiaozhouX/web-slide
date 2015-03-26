@@ -1,26 +1,24 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
-  <meta charset="UTF-8">
-  <title>Document</title>
-  <link rel="stylesheet" href="css/style.css" />
-   <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js"></' + 'script>')</script>
-    <script src="lib/JSXTransformer.js"></script>
-</head>
-<body>
-  <div id="slides">
-  </div>
-  <script>
-
-
-  </script>
-  <!-- <input type="text" id="connectCode">
-  <button onClick="connect()">连接</button>
-  <button onClick="restart()">第一页</button>
-  <button onClick="nextPage()">下一页</button>
-  <button onClick="prevPage()">上一页</button>
-  <button onClick="exit">退出</button> -->
-<script data-main="main" src="lib/require.js"></script>
-</body>
+    <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <!-- build:css -->
+        <link rel="stylesheet" href="css/style.css" />
+        <!-- endbuild -->
+    </head>
+    <body>
+        <div id="slides">
+        </div>
+        <!-- build:js -->
+        <script data-main="main" src="lib/require.js"></script>
+        <!-- endbuild -->
+        <script>
+        require(["main"]);
+        </script>
+        <!-- build:livereload -->
+        <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js"></' + 'script>')</script>
+        <!-- endbuild -->
+    </body>
 </html>

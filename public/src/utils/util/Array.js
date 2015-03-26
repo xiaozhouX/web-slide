@@ -1,4 +1,4 @@
-define(['./Lang'], function(Lang) {
+define(['./lang'], function(Lang) {
   var nativeKeys = Object.keys,
     ArrayProto = Array.prototype,
     slice = ArrayProto.slice,
