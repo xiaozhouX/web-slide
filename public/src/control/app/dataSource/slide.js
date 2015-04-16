@@ -9,8 +9,6 @@ define(['simple/dataSource'], function (DataSource) {
         url: getUrl,
         data: data,
       }).then(function(result){
-        result.data.currentPage = 0;
-        result.data.status = "unlink";
         return Promise.resolve(result);
       });
     },

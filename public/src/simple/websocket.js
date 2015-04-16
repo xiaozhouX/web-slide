@@ -1,8 +1,9 @@
-define(['app/simple/basic', 'utils/event', 'utils/util'], function (Basic, Event, _) {
+define(['simple/basic', 'utils/event', 'utils/util'], function (Basic, Event, _) {
   var DEFAULT_URL = 'ws://' + location.hostname + ':' + location.port;
   return Basic.extend(Event, {
     init: function (options) {
       Basic.prototype.init.apply(this, arguments);
+      options = options || {};
       this.appConfig = options.appConfig || {};
       this._initHandler();
     },

@@ -1,4 +1,4 @@
-define(['app/simple/view', 'tpl!app/template/control.tpl'], function (View, tpl) {
+define(['simple/view', 'tpl!app/template/control.tpl'], function (View, tpl) {
   return View.extend({
     init: function (options) {
       View.prototype.init.apply(this, arguments);
@@ -16,6 +16,7 @@ define(['app/simple/view', 'tpl!app/template/control.tpl'], function (View, tpl)
       'changeSlide': 'onChangeSlide',
       'remoteConnect': 'onRemoteConnect',
       'remoteUnConnect': 'onRemoteUnConnect',
+      'addNewSlides': 'onAddNewSlides',
       'saveSlide': 'onSaveSlide',
       'onAdd': 'onAddPage',
       'addPage': 'onAddPage',
@@ -41,6 +42,9 @@ define(['app/simple/view', 'tpl!app/template/control.tpl'], function (View, tpl)
     },
     onChangeSlide: function (n) {
       this.emit('changeSlide', n);
+    },
+    onAddNewSlides: function(){
+      this.ds.addNewSlide();
     },
     onSaveSlide: function () {
       this.ds.update({

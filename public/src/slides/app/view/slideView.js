@@ -1,4 +1,4 @@
-define(['app/simple/view', 'tpl!app/template/slide.tpl', 'utils/fullscreen', 'utils/domEvent/mouseDrag', 'utils/keepRange'], function (View, tpl, fullscreen, mouseDrag, keepRange) {
+define(['simple/view', 'tpl!app/template/slide.tpl', 'utils/fullscreen', 'utils/domEvent/mouseDrag', 'utils/keepRange'], function (View, tpl, fullscreen, mouseDrag, keepRange) {
   return View.extend({
     init: function () {
       View.prototype.init.apply(this, arguments);

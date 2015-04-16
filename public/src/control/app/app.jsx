@@ -1,10 +1,12 @@
-define(['react', 'app/view/index', 'app/dataSource/data', 'app/dataSource/remoteWs', 'utils/event'], function(React, View, data, remoteWs, Event){
+define(['react', 'app/view/index', 'app/dataSource/slide', 'app/dataSource/ws', 'utils/event'], function(React, View, SlideDS, remoteWs, Event){
   
   React.initializeTouchEvents(true);
   var Slide = View.Slide,
       Menu = View.Menu,
       Swipe = View.Swipe,
       Note = View.Note;
+  var remoteWs = new remoteWs(),
+      slideDs = new SlideDS;
   var minFloat = 50;
   function App() {
     this.SlideView = React.createClass({
@@ -14,18 +16,42 @@ define(['react', 'app/view/index', 'app/dataSource/data', 'app/dataSource/remote
         Event.on('playSlide', this.changeMode.bind(this, 'play'));
         Event.on('editSlide', this.changeMode.bind(this, 'edit'));
         Event.on('saveSlide', this.saveSlide);
+        this.id = '0';
         return {
-          slidesData: data,
+          slidesData: {
+            currentPage: 0,
+            pages: []
+          },
           status: {
-            connected: false
+            connected: false,
+            isSaving: false,
+            editing: false
           }
         };
       },
+      componentDidMount: function() {
+        var self = this,
+            slidesData = self.state.slidesData;
+        slideDs.load({
+          id: this.id
+        }).then(function(result){
+          slidesData.pages = result.data.pages;
+          if (self.isMounted()) {
+            self.setState({
+              slidesData: slidesData
+            });
+          }
+        });
+      },
       startConnect: function(){
-        var status = this.state.status;
-        status.connected = true;
-        this.setState({status: status});
-        remoteWs.connect();
+        var status = this.state.status,
+            self = this;
+        remoteWs.connect().then(function(){
+          return remoteWs.verify('0', '');
+        }).then(function(data){
+          status.connected = true;
+          self.setState({status: status});
+        });
       },
       breakConnect: function(){
         var status = this.state.status;
@@ -40,7 +66,7 @@ define(['react', 'app/view/index', 'app/dataSource/data', 'app/dataSource/remote
         this.state.slidesData.currentPage = curPage
         this.setState({currentPage: curPage});
         if(this.state.status.connected) {
-          remoteWs.toPage(curPage);
+          remoteWs.changeSlide(curPage);
         }
       },
       changeMode: function(mode){
@@ -53,9 +79,17 @@ define(['react', 'app/view/index', 'app/dataSource/data', 'app/dataSource/remote
         this.setState({status: status});
       },
       saveSlide: function(){
-        var status = this.state.status;
+        var status = this.state.status,
+            self = this;
         status.saving = true;
         this.setState({status: status});
+        slideDs.update({
+          id: this.id,
+          data: this.state.slidesData
+        }).then(function(){
+          status.saving = false;
+          self.setState({status: status});
+        });
       },
       showNote: function(){
         this.setState({isShowNote: true});
@@ -69,7 +103,7 @@ define(['react', 'app/view/index', 'app/dataSource/data', 'app/dataSource/remote
       },
       render: function () {
         var currentPage = this.state.slidesData.currentPage,
-            page = this.state.slidesData.pages[currentPage],
+            page = this.state.slidesData.pages[currentPage] || {},
             isEditing = this.state.status.editing,
             noteText = page.note || '备忘rusadssassssssssssssssssssssssssssssssssssssssssssddddddddddddddddddddddddd很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字';
         return (

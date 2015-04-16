@@ -5,7 +5,7 @@
     </div>
     <div class="elem content">
       <textarea name="
-        part-1-content" id="part1-content" class="text-elem content-elem" cols="30" rows="5">内容</textarea>
+        part-1-content" id="part1-content" class="text-elem content-elem" cols="30" rows="5" v-model="content"></textarea>
     </div>
       
     <div class="elem media" v-repeat="images" v-style="transform: 'translate(' + left + 'px, ' + top + 'px)', width: width + 'px', height: height + 'px'">

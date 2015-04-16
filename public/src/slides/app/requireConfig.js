@@ -3,6 +3,7 @@ define(function () {
     paths: {
       'tpl': 'lib/text',
       'Vue': 'lib/vue',
+      "simple": "../simple",
       'utils': '../utils'
     }
   });

@@ -1,4 +1,5 @@
 <div id="control" class="play-control">
+  <button v-on="click: addNewSlides" class="control-button control-addSlide">add New Slides</button>
   status: {{remote.status}}
   同时在线: {{remote.onlineNum - 1}}
   <input v-model="remote.connectCode" v-show="remote.status !== 'link'" type="text">
@@ -9,7 +10,7 @@
   <br>
   <button v-on="click: fullScreenPlay" class="control-button control-play">play</button>
   <button v-on="click: addPage" class="control-button control-add">add</button>
-  <button v-on="click: saveSlide" class="control-button control-connect">save</button>
+  <button v-on="click: saveSlide" class="control-button control-save">save</button>
 </div>
 <div id="play-list" class="play-list"> 
   <div v-repeat="slideData.pages" id="play-list-title-{{$index}}" class="play-list-title {{$index === slideData.currentPage ? 'current-page' : ''}}" v-on="click: changeSlide($index)">{{header}}</div>

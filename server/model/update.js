@@ -1,15 +1,7 @@
-var fs = require('fs');
-var path = require('path');
-var mongodb = require('mongodb');
+var connectDB = require('./connectDB');
 
 module.exports = function(options, onSuccess, onError){
-  var server = new mongodb.Server('localhost', 27017, {
-    auto_reconnect: true
-  });
-  var db = new mongodb.Db('web-slides', server, {
-    safe: true
-  });
-  db.open(function (err, db) {
+  connectDB(function (err, db) {
     if (!err) {
       db.createCollection('slides', {
         safe: true

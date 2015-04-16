@@ -6,6 +6,7 @@ var mongodb = require('mongodb');
 var dataPath = path.join(__dirname, 'data.json');
 var getCallback = require('./get');
 var updateCallback = require('./update');
+var addNew = require('./addNew');
 data.get('/get', function (req, res) {
   var id = req.query.id;
   var sendJson = makeSendJsonFn(res);
@@ -29,6 +30,15 @@ data.post('/update', function (req, res) {
       result: 'Data is Null'
     });
   }
+});
+data.post('/add', function (req, res) {
+  var body = req.body, sendJson;
+    id = '0'
+    sendJson = makeSendJsonFn(res);
+    getDataCallback(addNew, sendJson, {
+      id: id
+    });
+
 });
 
 function makeSendJsonFn(res){

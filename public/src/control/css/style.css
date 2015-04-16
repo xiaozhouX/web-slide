@@ -92,6 +92,9 @@ input, textarea {
   line-height: 70px;
   color: white; }
 
+.disabled-button {
+  color: gray; }
+
 .menu-enter {
   -webkit-transform: translateY(-100%);
   -ms-transform: translateY(-100%);

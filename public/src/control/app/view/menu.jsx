@@ -24,23 +24,33 @@ define(['react', 'utils/event'], function(React, Event){
       },
       render: function (){
         var status = this.props.status;
+        var connectButton, editButton, saveButton;
+        if (status.connected) {
+          connectButton = <span className="menu-button unconnect-button" onTouchStart={this.unconnect}>UnConnect</span>;
+          editButton = <span className="menu-button disabled-button" onTouchStart={this.edit}>Edit</span>;
+          saveButton = <span className="menu-button disabled-button" onTouchStart={this.save}>Save</span>;
+        } else {
+          if(status.editing) {
+            editButton = <span className="menu-button play-button" onTouchStart={this.play}>Play</span>;
+            connectButton = <span className="menu-button disabled-button">Connect</span>;
+          }else {
+            connectButton = <span className="menu-button connect-button" onTouchStart={this.connect} >Connect</span>;
+            editButton = <span className="menu-button edit-button" onTouchStart={this.edit}>Edit</span>;
+          }
+          if(status.saving) {
+            saveButton = <span className="menu-button saving-button">Saving</span>;
+          }else {
+            saveButton = <span className="menu-button save-button" onTouchStart={this.save}>Save</span> ;
+          }
+
+        }
         return (
           <ReactCSSTransitionGroup transitionName="menu">
           { this.props.isShow ? 
             <div className='menu' key="menu">
-              { status.connected ? 
-                <span className="menu-button unconnect-button" onTouchStart={this.unconnect}>UnConnect</span> : 
-                <span className="menu-button connect-button" onTouchStart={this.connect} >Connect</span> 
-              }
-              { status.editing ? 
-                <span className="menu-button play-button" onTouchStart={this.play}>Play</span> : 
-                <span className="menu-button edit-button" onTouchStart={this.edit}>Edit</span> 
-              }
-              { status.saving ? 
-                <span className="menu-button saving-button">Saving</span> : 
-                <span className="menu-button save-button" onTouchStart={this.save}>Save</span> 
-              }
-              
+              {connectButton}
+              {editButton}
+              {saveButton}
             </div> : '' 
           }
           </ReactCSSTransitionGroup>

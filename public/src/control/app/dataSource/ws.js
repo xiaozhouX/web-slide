@@ -22,12 +22,8 @@ define(['simple/websocket', 'utils/util/lang'], function (Websocket, _) {
         this.send(converTotMsg(['verify', id, pw]));
       }
       return this.connection.then(function () {
-        self.data.status = 'linking...';
         return new Promise(function (resolve, reject) {
           self.once('controlWS:verifySuccess', function (data) {
-            self.data.onlineNum = data;
-            self.data.status = 'link';
-            self.data.controlPic = 'http://qr.liantu.com/api.php?text=' + self.appConfig.controlUrl;
             resolve(data);
           });
         });

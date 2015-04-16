@@ -1,7 +1,8 @@
-define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
+define(['simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
   return Basic.extend({
     _loadData: function (url, method, data) {
       var self = this,
+        result,
         http_request;
       if (window.XMLHttpRequest) {
         http_request = new XMLHttpRequest();
@@ -27,8 +28,8 @@ define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
         http_request.onreadystatechange = function () {
           if (http_request.readyState == 4) {
             if (http_request.status == 200) {
-              self.data = JSON.parse(http_request.responseText);
-              resolve(self.data);
+              result = JSON.parse(http_request.responseText);
+              resolve(result);
             } else {
               reject('There was a problem with the request.');
             }
@@ -45,13 +46,15 @@ define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
         self = this;
       finalUrl = makeGetUrl(url, data);
       return this._loadData(finalUrl, 'GET', null).then(function (data) {
+        var result = data.result;
         if(data.status === 1){
+          self.data = result;
           return Promise.resolve({
             from: 'remote',
-            data: data.result
+            data: result
           });
         } else {
-          return Promise.reject(data.result)
+          return Promise.reject(result)
         }
       }, function (e) {
         var data;
@@ -73,7 +76,17 @@ define(['app/simple/basic', 'utils/makeGetUrl'], function (Basic, makeGetUrl) {
       if (this.cache) {
         localStorage.setItem('data:' + url, data);
       }
-      return this._loadData(url, 'POST', data);
+      return this._loadData(url, 'POST', data).then(function (data) {
+        if(data.status === 1){
+          return Promise.resolve({
+            data: data.result
+          });
+        } else {
+          return Promise.reject(data.result)
+        }
+      }, function (e) {
+        return Promise.reject(e);
+      });
     }
   });
 });

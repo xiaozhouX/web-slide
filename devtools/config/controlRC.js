@@ -6,6 +6,7 @@ module.exports = {
     "JSXTransformer": "bower_components/react/JSXTransformer",
     "jsx": "bower_components/requirejs-react-jsx/jsx",
     "text": "bower_components/requirejs-text/text",
+    "simple": "../simple",
     "utils": "../utils"
   },
   shim: {
