@@ -5,17 +5,44 @@
     height: 500px;
  }
  .play-control {
-   height: 200px;
+   height: 150px;
    text-align: center;
-   padding: 130px 0 0;
+   padding: 30px 0 0;
 }
 .control-button {
   width: 100px;
   height: 30px;
-  margin-right: 20px;
+  background-color: white;
+}
+.play-control-block {
+  height: 50px;
+}
+.control-replay {
+  border: 1px solid #D2143D;
+  font-size: 13px;
+  font-weight: 600;
+}
+.control-play {
+  border: 1px solid #D2143D;
+  font-size: 13px;
+  font-weight: 600;
+}
+.control-connect {
+  border: 1px solid #D2143D;
+  font-size: 13px;
+  font-weight: 600;
+}
+.control-save {
+  border: 1px solid #D2143D;
+  font-size: 13px;
+  font-weight: 600;
+}
+.control-add {
+  float: right;
+  margin-right: 20px; 
 }
 .play-list {
-  height: 250px;
+  height: 380px;
   overflow-y: scroll;
 }
 .play-list-title {

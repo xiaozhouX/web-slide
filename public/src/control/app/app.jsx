@@ -105,7 +105,7 @@ define(['react', 'app/view/index', 'app/dataSource/slide', 'app/dataSource/ws', 
         var currentPage = this.state.slidesData.currentPage,
             page = this.state.slidesData.pages[currentPage] || {},
             isEditing = this.state.status.editing,
-            noteText = page.note || '备忘rusadssassssssssssssssssssssssssssssssssssssssssssddddddddddddddddddddddddd很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字很多字';
+            noteText = page.note || '无备注';
         return (
           <Swipe onTap={this.onTap} isPreventDefault={!this.state.status.isEditing}
                 onSwipeUp={this.showNote} 

@@ -65,7 +65,6 @@ define(['simple/view', 'tpl!app/template/slideEdit.tpl'], function (View, tpl) {
     behaviorHandlers: {
       'changeImg': 'onChangeImg',
       'addImage': 'onAddImage',
-      'editNote': 'onEditNote',
     },
     onChangeImg: function (vm, $event) {
       var file = $event.target.files[0];
@@ -95,9 +94,6 @@ define(['simple/view', 'tpl!app/template/slideEdit.tpl'], function (View, tpl) {
         "height": 200,
         "width": 200
       });
-    },
-    onEditNote: function(){
-      this.data.pageData.note = '备注';
     }
   });
 });

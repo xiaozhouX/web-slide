@@ -98,6 +98,7 @@ define(['simple/view', 'tpl!app/template/control.tpl'], function (View, tpl) {
         id: this.id
       }).then(function (result) {
         self.data.slideData = result.data;
+        self.data.connectCode = '';
         self.emit('getData', result.data);
       });
       document.addEventListener('keydown', function (e) {

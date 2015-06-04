@@ -23,9 +23,10 @@
   padding: 5px;
   width: 100%;
   height: 100%;
-  background: white;
+  background: url(../asset/bg.jpg);
+  background-size: cover;
 }
-: -webkit-full-screen#play-slide {
+:-webkit-full-screen#play-slide {
   background-color: black;
 }
 .elem {
@@ -33,7 +34,7 @@
   margin: 0 auto;
   border: 1px solid #cccccc;
 }
-: -webkit-full-screen .elem {
+:-webkit-full-screen .elem {
   border: none;
   background: rgba(0, 0, 0, 0);
 }
@@ -95,7 +96,7 @@
   background: blue;
   cursor: nw-resize;
 }
-: -webkit-full-screen {
+:-webkit-full-screen {
   .elem-size-bar, .elem-move-bar {
     display: none;
  }

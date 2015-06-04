@@ -53,7 +53,9 @@ module.exports = function (gulp) {
 
   function resass(sassFile, cssPath) {
     for (var i = 0; i < sassFile.length; i++) {
-      gulp.src(sassFile[i]).pipe(sass()).pipe(gulp.dest(cssPath));
+      gulp.src(sassFile[i]).pipe(sass({
+            errLogToConsole: true
+        })).pipe(gulp.dest(cssPath));
     }
   }
 
@@ -91,8 +93,8 @@ module.exports = function (gulp) {
   });
   registerFilePath(filePath);
   gulp.task('default', ['server']);
-  gulp.task('sass', function(){
-    gulp.src('../public/src/slides/sass/*.scss')
+  gulp.task('buildSass', function(){
+    gulp.src('../public/src/slides/sass/style.scss')
         .pipe(sass())
         .pipe(gulp.dest('../public/src/slides/css/'));
   });
